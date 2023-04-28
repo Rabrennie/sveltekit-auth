@@ -27,6 +27,10 @@
         "./providers": {
             "types": "./dist/AuthProviders/index.d.ts",
             "import": "./dist/AuthProviders/index.js"
+        },
+        "./helpers": {
+            "types": "./dist/Helpers/index.d.ts",
+            "import": "./dist/Helpers/index.js"
         }
     },
     "files": [
@@ -76,6 +80,9 @@
             ],
             "providers": [
                 "./dist/AuthProviders/index.d.ts"
+            ],
+            "helpers": [
+                "./dist/Helpers/index.d.ts"
             ]
         }
     }

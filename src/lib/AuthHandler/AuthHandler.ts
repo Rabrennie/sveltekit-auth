@@ -30,6 +30,12 @@ interface AuthHandlerConfig {
      * @default '/redirect'
      */
     redirectPrefix?: string;
+
+    /**
+     * @example '/login'
+     * @default '/login'
+     */
+    loginRoute?: string;
 }
 
 export function AuthHandler(config: AuthHandlerConfig) {
@@ -44,6 +50,7 @@ export function AuthHandler(config: AuthHandlerConfig) {
 
         event.locals.auth = {
             getSession: async () => await config.sessionStrategy.getSession(event),
+            loginRoute: '/login',
         };
 
         if (!url.pathname.startsWith(routePrefix)) {
