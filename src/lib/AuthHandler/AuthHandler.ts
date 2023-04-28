@@ -2,7 +2,7 @@ import { redirect, type Handle, fail } from '@sveltejs/kit';
 
 import type { AuthProviderConfig, Profile } from '../AuthProviders/AuthProvider.js';
 import type { AuthProvider } from '../AuthProviders/AuthProvider.js';
-import { OAuthProvider } from '../AuthProviders/OAuthProvider.js';
+import type { OAuthProvider } from '../AuthProviders/OAuthProvider.js';
 import type {
     SessionStrategyConfig,
     SessionStrategy,
@@ -66,8 +66,11 @@ export function AuthHandler(config: AuthHandlerConfig) {
         }
 
         if (url.pathname.startsWith(`${routePrefix}${redirectPrefix}`)) {
-            if (provider instanceof OAuthProvider) {
-                throw provider.redirectToProvider(event, callbackUri);
+            if (provider && 'redirectToProvider' in provider) {
+                throw (provider as OAuthProvider<AuthHandlerConfig, Profile>).redirectToProvider(
+                    event,
+                    callbackUri,
+                );
             }
 
             throw fail(400);
