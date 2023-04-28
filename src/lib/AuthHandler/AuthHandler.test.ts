@@ -101,6 +101,29 @@ describe('AuthHandler', () => {
             expect(mockSessionStrategy.store).toHaveBeenCalledWith(any(), profile);
         });
 
+        it('calls afterCallback hook', async () => {
+            const profile = {
+                providerId: '123321',
+                provider: 'myProvider',
+                username: 'abc',
+                name: 'Some One',
+                email: 'test@example.com',
+            };
+            mockProvider.verify.mockResolvedValue(profile);
+            mockRequestEvent.url = new URL('/auth/callback/MockAuthProvider', 'http://example.com');
+
+            const mockHook = vi.fn();
+
+            const handler = AuthHandler({
+                providers: [mockProvider],
+                sessionStrategy: mockSessionStrategy,
+                hooks: { afterCallback: mockHook },
+            });
+
+            await expect(handler(handlerInput)).rejects.toEqual({ location: '/', status: 302 });
+            expect(mockHook).toHaveBeenCalledWith(any(), profile);
+        });
+
         it('verifies callback and stores session when route prefix and callback prefix are changed', async () => {
             const profile = {
                 providerId: '123321',

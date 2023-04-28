@@ -1,4 +1,4 @@
-import { redirect, type Handle, fail } from '@sveltejs/kit';
+import { redirect, type Handle, fail, type RequestEvent } from '@sveltejs/kit';
 
 import type { AuthProviderConfig, Profile } from '../AuthProviders/AuthProvider.js';
 import type { AuthProvider } from '../AuthProviders/AuthProvider.js';
@@ -8,10 +8,16 @@ import type {
     SessionStrategy,
 } from '../SessionStrategies/SessionStrategy.js';
 
+interface AuthHandlerHooks {
+    afterCallback?: (event: RequestEvent, profile: Profile) => Promise<void>;
+}
+
 interface AuthHandlerConfig {
     providers: AuthProvider<AuthProviderConfig, Profile>[];
 
     sessionStrategy: SessionStrategy<SessionStrategyConfig>;
+
+    hooks?: AuthHandlerHooks;
 
     /**
      * @example '/auth'
@@ -46,6 +52,7 @@ export function AuthHandler(config: AuthHandlerConfig) {
             callbackPrefix = '/callback',
             redirectPrefix = '/redirect',
             providers,
+            hooks = {},
         } = config;
 
         event.locals.auth = {
@@ -68,6 +75,10 @@ export function AuthHandler(config: AuthHandlerConfig) {
 
             const profile = await provider.verify(event, callbackUri);
             await config.sessionStrategy.store(event, profile);
+
+            if (hooks.afterCallback) {
+                await hooks.afterCallback(event, profile);
+            }
 
             throw redirect(302, '/');
         }
