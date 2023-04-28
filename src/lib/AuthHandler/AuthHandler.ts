@@ -74,10 +74,9 @@ export function AuthHandler(config: AuthHandlerConfig) {
 
         if (url.pathname.startsWith(`${routePrefix}${redirectPrefix}`)) {
             if (provider && 'redirectToProvider' in provider) {
-                throw (provider as OAuthProvider<AuthHandlerConfig, Profile>).redirectToProvider(
-                    event,
-                    callbackUri,
-                );
+                throw await (
+                    provider as OAuthProvider<AuthHandlerConfig, Profile>
+                ).redirectToProvider(event, callbackUri);
             }
 
             throw fail(400);

@@ -5,8 +5,5 @@ export abstract class OAuthProvider<
     C extends AuthProviderConfig,
     P extends Profile,
 > extends AuthProvider<C, P> {
-    /**
-     * @throws {Redirect}
-     */
-    abstract redirectToProvider(event: RequestEvent, callbackUri: string): Redirect;
+    abstract redirectToProvider(event: RequestEvent, callbackUri: string): Promise<Redirect>;
 }

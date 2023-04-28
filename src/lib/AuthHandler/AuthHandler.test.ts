@@ -59,7 +59,10 @@ describe('AuthHandler', () => {
 
         await handler(handlerInput);
 
-        expect(mockRequestEvent.locals.auth).toEqual({ getSession: anyFunction() });
+        expect(mockRequestEvent.locals.auth).toEqual({
+            getSession: anyFunction(),
+            loginRoute: '/login',
+        });
     });
 
     describe('callback', () => {
@@ -151,7 +154,7 @@ describe('AuthHandler', () => {
         it('throws redirect if provider does exist and is OAuthProvider', async () => {
             const oauthMockProvider = mock<OAuthProvider<AuthProviderConfig, Profile>>();
             oauthMockProvider.name = 'MockAuthProvider';
-            oauthMockProvider.redirectToProvider.mockReturnValue(
+            oauthMockProvider.redirectToProvider.mockResolvedValue(
                 redirect(307, 'http://example.com/somepath'),
             );
 
@@ -171,7 +174,7 @@ describe('AuthHandler', () => {
         it('throws redirect if provider does exist and is OAuthProvider when route prefix and callback prefix are changed', async () => {
             const oauthMockProvider = mock<OAuthProvider<AuthProviderConfig, Profile>>();
             oauthMockProvider.name = 'MockAuthProvider';
-            oauthMockProvider.redirectToProvider.mockReturnValue(
+            oauthMockProvider.redirectToProvider.mockResolvedValue(
                 redirect(307, 'http://example.com/somepath'),
             );
 

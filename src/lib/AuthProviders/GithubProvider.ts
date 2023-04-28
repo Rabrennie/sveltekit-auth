@@ -1,5 +1,5 @@
 import { type BaseClient, Issuer, generators } from 'openid-client';
-import { redirect, fail, type Redirect, type RequestEvent } from '@sveltejs/kit';
+import { redirect, fail, type RequestEvent } from '@sveltejs/kit';
 
 import type { AuthProviderConfig, Profile } from './AuthProvider.js';
 import { OAuthProvider } from './OAuthProvider.js';
@@ -97,7 +97,7 @@ export class GithubProvider extends OAuthProvider<GithubProviderConfig, GithubPr
         });
     }
 
-    redirectToProvider({ cookies }: RequestEvent, callbackUri: string): Redirect {
+    async redirectToProvider({ cookies }: RequestEvent, callbackUri: string) {
         const state = generators.state();
         cookies.set('state', state, { path: '/', httpOnly: true });
 
