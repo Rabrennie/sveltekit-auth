@@ -1,7 +1,7 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import jwt from 'jsonwebtoken';
 
-import type { Profile } from '../AuthProviders/AuthProvider.js';
+import type { Profile } from '../Profile.js';
 import { SessionStrategy, type Session, type SessionStrategyConfig } from './SessionStrategy.js';
 
 export interface JwtStrategyConfig extends SessionStrategyConfig {

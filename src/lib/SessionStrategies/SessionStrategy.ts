@@ -1,6 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit';
 
-import type { Profile } from '../AuthProviders/AuthProvider.js';
+import type { Profile } from '../Profile.js';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SessionStrategyConfig {}

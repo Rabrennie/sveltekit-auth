@@ -1,5 +1,6 @@
 import type { Redirect, RequestEvent } from '@sveltejs/kit';
-import { type AuthProviderConfig, type Profile, AuthProvider } from './AuthProvider.js';
+import { type AuthProviderConfig, AuthProvider } from './AuthProvider.js';
+import type { Profile } from '../Profile.js';
 
 export abstract class OAuthProvider<
     C extends AuthProviderConfig,

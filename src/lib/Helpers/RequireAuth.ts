@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 
-import type { Profile } from '../AuthProviders/index.js';
+import type { Profile } from '../Profile.js';
 
 // TODO: Tidy up these types, they work but are a mess
 
