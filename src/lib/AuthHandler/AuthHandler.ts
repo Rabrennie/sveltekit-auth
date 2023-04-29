@@ -1,15 +1,16 @@
 import { redirect, type Handle, fail, type RequestEvent } from '@sveltejs/kit';
 
-import type { AuthProviderConfig, Profile } from '../AuthProviders/AuthProvider.js';
+import type { AuthProviderConfig } from '../AuthProviders/AuthProvider.js';
 import type { AuthProvider } from '../AuthProviders/AuthProvider.js';
 import type { OAuthProvider } from '../AuthProviders/OAuthProvider.js';
 import type {
     SessionStrategyConfig,
     SessionStrategy,
 } from '../SessionStrategies/SessionStrategy.js';
+import type { Profile } from '../Profile.js';
 
 interface AuthHandlerHooks {
-    afterCallback?: (event: RequestEvent, profile: Profile) => Promise<void>;
+    onLogin?: (event: RequestEvent, profile: Profile) => Promise<void>;
 }
 
 interface AuthHandlerConfig {
@@ -38,10 +39,18 @@ interface AuthHandlerConfig {
     redirectPrefix?: string;
 
     /**
+     * Where the user will be redirected to when using the RequireAuth helper if they are not logged in
      * @example '/login'
      * @default '/login'
      */
     loginRoute?: string;
+
+    /**
+     * Where the user will be redirected to on a successful login
+     * @example '/'
+     * @default '/'
+     */
+    loginRedirectRoute?: string;
 }
 
 export function AuthHandler(config: AuthHandlerConfig) {
@@ -51,13 +60,15 @@ export function AuthHandler(config: AuthHandlerConfig) {
             routePrefix = '/auth',
             callbackPrefix = '/callback',
             redirectPrefix = '/redirect',
+            loginRoute = '/login',
+            loginRedirectRoute = '/',
             providers,
             hooks = {},
         } = config;
 
         event.locals.auth = {
             getSession: async () => await config.sessionStrategy.getSession(event),
-            loginRoute: '/login',
+            loginRoute: loginRoute,
         };
 
         if (!url.pathname.startsWith(routePrefix)) {
@@ -76,11 +87,11 @@ export function AuthHandler(config: AuthHandlerConfig) {
             const profile = await provider.verify(event, callbackUri);
             await config.sessionStrategy.store(event, profile);
 
-            if (hooks.afterCallback) {
-                await hooks.afterCallback(event, profile);
+            if (hooks.onLogin) {
+                await hooks.onLogin(event, profile);
             }
 
-            throw redirect(302, '/');
+            throw redirect(302, loginRedirectRoute);
         }
 
         if (url.pathname.startsWith(`${routePrefix}${redirectPrefix}`)) {

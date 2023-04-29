@@ -1,15 +1,9 @@
 import type { ActionFailure, RequestEvent } from '@sveltejs/kit';
 
+import type { Profile } from '../Profile.js';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AuthProviderConfig {}
-
-export interface Profile {
-    providerId: string;
-    provider: string;
-    username?: string;
-    name?: string;
-    email: string;
-}
 
 export abstract class AuthProvider<C extends AuthProviderConfig, P extends Profile> {
     config: C;

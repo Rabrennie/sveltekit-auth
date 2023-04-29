@@ -2,10 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { any, anyFunction, mock, type MockProxy } from 'vitest-mock-extended';
 import { redirect, type Handle, type RequestEvent } from '@sveltejs/kit';
 
-import type { AuthProvider, AuthProviderConfig, Profile } from '$lib/AuthProviders';
+import type { AuthProvider, AuthProviderConfig } from '$lib/AuthProviders';
 import type { SessionStrategy, SessionStrategyConfig } from '$lib/SessionStrategies';
 import { AuthHandler } from '$lib/AuthHandler/AuthHandler';
 import type { OAuthProvider } from '$lib/AuthProviders';
+import type { Profile } from '$lib/Profile';
 
 describe('AuthHandler', () => {
     let mockProvider: MockProxy<AuthProvider<AuthProviderConfig, Profile>>;
@@ -101,7 +102,7 @@ describe('AuthHandler', () => {
             expect(mockSessionStrategy.store).toHaveBeenCalledWith(any(), profile);
         });
 
-        it('calls afterCallback hook', async () => {
+        it('calls onLogin hook', async () => {
             const profile = {
                 providerId: '123321',
                 provider: 'myProvider',
@@ -117,7 +118,7 @@ describe('AuthHandler', () => {
             const handler = AuthHandler({
                 providers: [mockProvider],
                 sessionStrategy: mockSessionStrategy,
-                hooks: { afterCallback: mockHook },
+                hooks: { onLogin: mockHook },
             });
 
             await expect(handler(handlerInput)).rejects.toEqual({ location: '/', status: 302 });

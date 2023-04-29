@@ -1,8 +1,9 @@
 import { type BaseClient, Issuer, generators } from 'openid-client';
 import { redirect, fail, type RequestEvent } from '@sveltejs/kit';
 
-import type { AuthProviderConfig, Profile } from './AuthProvider.js';
+import type { AuthProviderConfig } from './AuthProvider.js';
 import { OAuthProvider } from './OAuthProvider.js';
+import type { Profile } from '../Profile.js';
 
 export interface GithubUser {
     login: string;
@@ -140,6 +141,7 @@ export class GithubProvider extends OAuthProvider<GithubProviderConfig, GithubPr
             username: user.login,
             name: user.name ?? undefined,
             email: emails.find((e) => e.primary)?.email ?? emails[0].email,
+            image: user.avatar_url,
             emails,
             user,
         };

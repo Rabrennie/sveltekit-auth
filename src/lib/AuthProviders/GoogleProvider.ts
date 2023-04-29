@@ -2,7 +2,8 @@ import { type RequestEvent, type Redirect, redirect, fail } from '@sveltejs/kit'
 import { Issuer, TokenSet, generators } from 'openid-client';
 
 import { OAuthProvider } from './OAuthProvider.js';
-import type { AuthProviderConfig, Profile } from './AuthProvider.js';
+import type { AuthProviderConfig } from './AuthProvider.js';
+import type { Profile } from '../Profile.js';
 
 interface GoogleProviderConfig extends AuthProviderConfig {
     clientId: string;
@@ -68,6 +69,7 @@ export class GoogleProvider extends OAuthProvider<GoogleProviderConfig, Profile>
             name: userInfo.name,
             username: userInfo.email,
             email: userInfo.email as string,
+            image: userInfo.picture,
         };
     }
 }
