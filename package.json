@@ -3,6 +3,7 @@
     "version": "0.0.5",
     "homepage": "https://github.com/Rabrennie/sveltekit-auth",
     "description": "Auth library for SvelteKit supporting OpenID/OAuth providers",
+    "license": "MIT",
     "scripts": {
         "dev": "vite dev",
         "build": "vite build && npm run package",
