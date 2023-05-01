@@ -1,6 +1,6 @@
 import { page } from '$app/stores';
 
-export function signin(node: HTMLElement, provider: string) {
+export function login(node: HTMLElement, provider: string) {
     let clickListener: undefined | (() => void);
 
     const unsubscribe = page.subscribe((pageData) => {
