@@ -218,4 +218,67 @@ describe('AuthHandler', () => {
             });
         });
     });
+
+    describe('logout', () => {
+        it('throws redirect', async () => {
+            mockRequestEvent.url = new URL('/auth/logout', 'http://example.com');
+
+            const handler = AuthHandler({
+                providers: [mockProvider],
+                sessionStrategy: mockSessionStrategy,
+            });
+
+            await expect(handler(handlerInput)).rejects.toEqual({
+                location: '/login',
+                status: 302,
+            });
+            expect(mockSessionStrategy.destroySession).toHaveBeenCalledWith(any());
+        });
+
+        it('throws redirect to logoutRoute', async () => {
+            mockRequestEvent.url = new URL('/auth/logout', 'http://example.com');
+
+            const handler = AuthHandler({
+                providers: [mockProvider],
+                sessionStrategy: mockSessionStrategy,
+                loginRoute: '/login',
+                logoutRoute: '/somewhereElse',
+            });
+
+            await expect(handler(handlerInput)).rejects.toEqual({
+                location: '/somewhereElse',
+                status: 302,
+            });
+        });
+
+        it('throws redirect to loginRoute if logoutRoute is not defined', async () => {
+            mockRequestEvent.url = new URL('/auth/logout', 'http://example.com');
+
+            const handler = AuthHandler({
+                providers: [mockProvider],
+                sessionStrategy: mockSessionStrategy,
+                loginRoute: '/somewhereElse',
+            });
+
+            await expect(handler(handlerInput)).rejects.toEqual({
+                location: '/somewhereElse',
+                status: 302,
+            });
+        });
+
+        it('throws redirect when logoutPrefix is changed', async () => {
+            mockRequestEvent.url = new URL('/auth/signout', 'http://example.com');
+
+            const handler = AuthHandler({
+                providers: [mockProvider],
+                sessionStrategy: mockSessionStrategy,
+                logoutPrefix: '/signout',
+            });
+
+            await expect(handler(handlerInput)).rejects.toEqual({
+                location: '/login',
+                status: 302,
+            });
+        });
+    });
 });

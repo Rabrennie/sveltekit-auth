@@ -39,6 +39,12 @@ export interface AuthHandlerConfig {
     redirectPrefix?: string;
 
     /**
+     * @example '/logout'
+     * @default '/logout'
+     */
+    logoutPrefix?: string;
+
+    /**
      * Where the user will be redirected to when using the RequireAuth helper if they are not logged in
      * @example '/login'
      * @default '/login'
@@ -51,6 +57,13 @@ export interface AuthHandlerConfig {
      * @default '/'
      */
     loginRedirectRoute?: string;
+
+    /**
+     * Where the user will be redirected to after logging out, Defaults to loginRoute
+     * @example '/login'
+     * @default '/login'
+     */
+    logoutRoute?: string;
 }
 
 export function AuthHandler(config: AuthHandlerConfig) {
@@ -60,8 +73,10 @@ export function AuthHandler(config: AuthHandlerConfig) {
             routePrefix = '/auth',
             callbackPrefix = '/callback',
             redirectPrefix = '/redirect',
+            logoutPrefix = '/logout',
             loginRoute = '/login',
             loginRedirectRoute = '/',
+            logoutRoute = loginRoute,
             providers,
             hooks = {},
         } = config;
@@ -72,8 +87,10 @@ export function AuthHandler(config: AuthHandlerConfig) {
                 routePrefix,
                 callbackPrefix,
                 redirectPrefix,
+                logoutPrefix,
                 loginRoute,
                 loginRedirectRoute,
+                logoutRoute,
             }),
             loginRoute: loginRoute,
         };
@@ -82,10 +99,18 @@ export function AuthHandler(config: AuthHandlerConfig) {
             return resolve(event);
         }
 
+        // logout
+        if (url.pathname.startsWith(`${routePrefix}${logoutPrefix}`)) {
+            await config.sessionStrategy.destroySession(event);
+
+            throw redirect(302, logoutRoute);
+        }
+
         const providerName = url.pathname.split('/').at(3);
         const provider = providers.find((p) => p.name === providerName);
         const callbackUri = `${url.origin}${routePrefix}${callbackPrefix}/${providerName}`;
 
+        // callback
         if (url.pathname.startsWith(`${routePrefix}${callbackPrefix}`)) {
             if (!provider) {
                 throw fail(400);
@@ -101,6 +126,7 @@ export function AuthHandler(config: AuthHandlerConfig) {
             throw redirect(302, loginRedirectRoute);
         }
 
+        // redirect
         if (url.pathname.startsWith(`${routePrefix}${redirectPrefix}`)) {
             if (provider && 'redirectToProvider' in provider) {
                 throw await (
@@ -110,7 +136,6 @@ export function AuthHandler(config: AuthHandlerConfig) {
 
             throw fail(400);
         }
-
         return resolve(event);
     }) satisfies Handle;
 }

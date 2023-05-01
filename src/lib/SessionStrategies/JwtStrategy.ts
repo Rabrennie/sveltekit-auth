@@ -30,4 +30,8 @@ export class JwtStrategy extends SessionStrategy<JwtStrategyConfig> {
             }
         }
     }
+
+    async destroySession(event: RequestEvent): Promise<void> {
+        event.cookies.delete('jwt', { path: '/', httpOnly: true });
+    }
 }

@@ -17,4 +17,5 @@ export abstract class SessionStrategy<C extends SessionStrategyConfig> {
 
     abstract store(event: RequestEvent, profile: Profile): Promise<void>;
     abstract getSession(event: RequestEvent): Promise<Session | undefined>;
+    abstract destroySession(event: RequestEvent): Promise<void>;
 }
