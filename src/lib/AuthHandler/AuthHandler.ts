@@ -14,31 +14,57 @@ interface AuthHandlerHooks {
 }
 
 export interface AuthHandlerConfig {
+    /**
+     * Registers all the providers that the current app supports
+     *
+     * @example [new GithubProvider(config)]
+     */
     providers: AuthProvider<AuthProviderConfig, Profile>[];
 
+    /**
+     * Registers the session strategy that will be used in the current app.
+     *
+     * @example new JwtProvider(config)
+     */
     sessionStrategy: SessionStrategy<SessionStrategyConfig>;
 
+    /**
+     * Allows hooking into certain parts of the auth process. Can be used for features such as persisting user data to database
+     * or logging
+     */
     hooks?: AuthHandlerHooks;
 
     /**
+     * Changes the "root" path prefix for all routes used by sveltekit-auth. By default this is set to '/auth' and
+     * all urls used by sveltekit-auth will start with '/auth' (example: '/auth/redirect/github')
+     *
      * @example '/auth'
      * @default '/auth'
      */
     routePrefix?: string;
 
     /**
+     * Changes the part of the path used to match a callback route. By default this is set to '/callback'
+     * (example: '/auth/callback/github')
+     *
      * @example '/callback'
      * @default '/callback'
      */
     callbackPrefix?: string;
 
     /**
+     * Changes the part of the path used to match a redirect route. By default this is set to '/redirect'
+     * (example: '/auth/redirect/github')
+     *
      * @example '/redirect'
      * @default '/redirect'
      */
     redirectPrefix?: string;
 
     /**
+     * Changes the part of the path used to match the logout route. By default this is set to '/logout'
+     * (example: '/auth/logout')
+     *
      * @example '/logout'
      * @default '/logout'
      */
@@ -46,6 +72,7 @@ export interface AuthHandlerConfig {
 
     /**
      * Where the user will be redirected to when using the RequireAuth helper if they are not logged in
+     *
      * @example '/login'
      * @default '/login'
      */
@@ -53,6 +80,7 @@ export interface AuthHandlerConfig {
 
     /**
      * Where the user will be redirected to on a successful login
+     *
      * @example '/'
      * @default '/'
      */
@@ -60,6 +88,7 @@ export interface AuthHandlerConfig {
 
     /**
      * Where the user will be redirected to after logging out, Defaults to loginRoute
+     *
      * @example '/login'
      * @default '/login'
      */
