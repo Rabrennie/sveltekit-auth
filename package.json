@@ -1,6 +1,6 @@
 {
     "name": "@rabrennie/sveltekit-auth",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "scripts": {
         "dev": "vite dev",
         "build": "vite build && npm run package",
@@ -31,6 +31,10 @@
         "./helpers": {
             "types": "./dist/Helpers/index.d.ts",
             "import": "./dist/Helpers/index.js"
+        },
+        "./client": {
+            "types": "./dist/Client/index.d.ts",
+            "import": "./dist/Client/index.js"
         }
     },
     "files": [
@@ -83,6 +87,9 @@
             ],
             "helpers": [
                 "./dist/Helpers/index.d.ts"
+            ],
+            "client": [
+                "./dist/Client/index.d.ts"
             ]
         }
     }

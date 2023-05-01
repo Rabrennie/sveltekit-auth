@@ -13,7 +13,7 @@ interface AuthHandlerHooks {
     onLogin?: (event: RequestEvent, profile: Profile) => Promise<void>;
 }
 
-interface AuthHandlerConfig {
+export interface AuthHandlerConfig {
     providers: AuthProvider<AuthProviderConfig, Profile>[];
 
     sessionStrategy: SessionStrategy<SessionStrategyConfig>;
@@ -68,6 +68,13 @@ export function AuthHandler(config: AuthHandlerConfig) {
 
         event.locals.auth = {
             getSession: async () => await config.sessionStrategy.getSession(event),
+            getAuthPageData: async () => ({
+                routePrefix,
+                callbackPrefix,
+                redirectPrefix,
+                loginRoute,
+                loginRedirectRoute,
+            }),
             loginRoute: loginRoute,
         };
 

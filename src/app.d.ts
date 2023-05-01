@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { AuthClient } from '$lib';
+import type { AuthClient, AuthPageData } from '$lib';
 
 // for information about these interfaces
 declare global {
@@ -9,7 +9,9 @@ declare global {
         interface Locals {
             auth: AuthClient;
         }
-        // interface PageData {}
+        interface PageData {
+            auth: AuthPageData;
+        }
         // interface Platform {}
     }
 }

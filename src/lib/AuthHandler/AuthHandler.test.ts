@@ -62,6 +62,7 @@ describe('AuthHandler', () => {
 
         expect(mockRequestEvent.locals.auth).toEqual({
             getSession: anyFunction(),
+            getAuthPageData: anyFunction(),
             loginRoute: '/login',
         });
     });
