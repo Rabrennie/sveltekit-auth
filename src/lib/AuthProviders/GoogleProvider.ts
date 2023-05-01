@@ -54,7 +54,7 @@ export class GoogleProvider extends OAuthProvider<GoogleProviderConfig, Profile>
         } catch {
             throw fail(403);
         } finally {
-            cookies.delete('nonce');
+            cookies.delete('nonce', { path: '/', httpOnly: true });
         }
 
         if (tokenSet.error) {

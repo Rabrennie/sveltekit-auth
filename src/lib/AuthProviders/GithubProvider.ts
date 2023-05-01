@@ -118,7 +118,7 @@ export class GithubProvider extends OAuthProvider<GithubProviderConfig, GithubPr
             state: cookies.get('state'),
         });
 
-        cookies.delete('state');
+        cookies.delete('state', { path: '/', httpOnly: true });
 
         if (tokenSet.error) {
             throw fail(403, tokenSet);
