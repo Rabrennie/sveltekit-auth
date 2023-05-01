@@ -1,6 +1,8 @@
 {
     "name": "@rabrennie/sveltekit-auth",
-    "version": "0.0.4",
+    "version": "0.0.5",
+    "homepage": "https://github.com/Rabrennie/sveltekit-auth",
+    "description": "Auth library for SvelteKit supporting OpenID/OAuth providers",
     "scripts": {
         "dev": "vite dev",
         "build": "vite build && npm run package",
@@ -43,11 +45,11 @@
         "!dist/**/*.spec.*"
     ],
     "peerDependencies": {
-        "svelte": "^3.54.0"
+        "svelte": "^3.54.0",
+        "@sveltejs/kit": "^1.5.0"
     },
     "devDependencies": {
         "@sveltejs/adapter-auto": "^2.0.0",
-        "@sveltejs/kit": "^1.5.0",
         "@sveltejs/package": "^2.0.0",
         "@types/jsonwebtoken": "^9.0.1",
         "@typescript-eslint/eslint-plugin": "^5.45.0",

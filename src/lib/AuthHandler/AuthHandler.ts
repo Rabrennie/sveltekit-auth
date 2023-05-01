@@ -84,13 +84,13 @@ export function AuthHandler(config: AuthHandlerConfig) {
         event.locals.auth = {
             getSession: async () => await config.sessionStrategy.getSession(event),
             getAuthPageData: async () => ({
-                routePrefix,
-                callbackPrefix,
-                redirectPrefix,
-                logoutPrefix,
-                loginRoute,
-                loginRedirectRoute,
-                logoutRoute,
+                loginPaths: Object.fromEntries(
+                    config.providers.map((p) => [
+                        p.name,
+                        `${routePrefix}${redirectPrefix}/${p.name}`,
+                    ]),
+                ),
+                logOutPath: `${routePrefix}${logoutPrefix}`,
             }),
             loginRoute: loginRoute,
         };

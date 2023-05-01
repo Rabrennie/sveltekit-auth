@@ -1,14 +1,11 @@
 import { page } from '$app/stores';
-import type { AuthPageData } from '../../AuthClient.js';
 
-export function urlAction(node: HTMLElement, getUrl: (authPageData: AuthPageData) => string) {
+export function urlAction(node: HTMLElement, getUrl: (pageData: App.PageData) => string) {
     let clickListener: undefined | (() => void);
 
     const unsubscribe = page.subscribe((pageData) => {
         // TODO: throw error in dev mode if pageData.data.auth is not set
-        const authPageData = pageData.data.auth;
-
-        const url = getUrl(authPageData);
+        const url = getUrl(pageData.data);
 
         if (node instanceof HTMLAnchorElement) {
             node.setAttribute('href', url);
