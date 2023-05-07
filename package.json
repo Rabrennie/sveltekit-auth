@@ -1,6 +1,6 @@
 {
     "name": "@rabrennie/sveltekit-auth",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "homepage": "https://github.com/Rabrennie/sveltekit-auth",
     "description": "Auth library for SvelteKit supporting OpenID/OAuth providers",
     "license": "MIT",
